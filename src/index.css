@@ -4,6 +4,7 @@
   margin: 0;
   background: var(--color-background);
   font: 18px/145% var(--sans);
+  font-size: var(--font-size-base);
   letter-spacing: 0.18px;
   color: var(--color-text);
   text-rendering: optimizeLegibility;
