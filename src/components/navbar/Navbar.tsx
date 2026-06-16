@@ -4,13 +4,16 @@ import {
   SignOutIcon,
   UserIcon,
 } from "@phosphor-icons/react";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.svg";
 import Input from "../input/Input";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+
   const currentPath = window.location.pathname;
 
   const handleSearchButtonClick = () => {
@@ -23,6 +26,7 @@ export default function Navbar() {
   };
   const handleProfileButtonClick = () => {
     if (currentPath === "/profile") return;
+    setSearch("");
     navigate("/profile");
   };
   const handleSignOutButtonClick = () => {
@@ -36,14 +40,14 @@ export default function Navbar() {
         <img
           src={logo}
           alt="logo"
-          className="w-8 h-8 mr-2 bg-primary cursor-pointer"
+          className="w-40 cursor-pointer"
           onClick={handleHomeButtonClick}
         />
         {currentPath !== "/profile" && (
           <Input
             placeholder="Buscar oportunidades, pessoas..."
-            value=""
-            onChange={() => {}}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             icon={<MagnifyingGlassIcon size={20} />}
             width="500px"
           />

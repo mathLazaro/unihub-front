@@ -28,7 +28,7 @@ export default function Input({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="flex-1 focus:outline-none bg-transparent"
+      className="flex-1 focus:outline-none bg-transparent text-xl "
     />
   );
 
