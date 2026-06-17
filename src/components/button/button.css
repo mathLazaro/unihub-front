@@ -1,0 +1,75 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
+  white-space: nowrap;
+}
+
+/* Tamanhos */
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+.btn-md {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+}
+.btn-lg {
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+}
+
+/* Estilos */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+.btn-danger {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+.btn-neutral {
+  background-color: transparent;
+  color: var(--color-text);
+  border: transparent;
+}
+
+/* Hover */
+.btn-primary:hover {
+  background-color: var(--color-primary-600);
+}
+.btn-secondary:hover {
+  background-color: var(--color-secondary-hover);
+}
+.btn-danger:hover {
+  filter: brightness(0.9);
+}
+.btn-neutral:hover {
+  background-color: var(--color-secondary-hover);
+}
+
+/* Estados */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-full {
+  width: 100%;
+}
+.btn-loading {
+  opacity: 0.7;
+  cursor: wait;
+}
