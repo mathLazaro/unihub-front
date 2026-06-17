@@ -24,6 +24,7 @@
 
   --color-background: #e9f0fa;
   --color-surface: #ffffff;
+  --color-surface-input: #f5f6fa;
 
   /* Texto */
   --color-text: #0f172a;
@@ -65,6 +66,7 @@
 
   --color-background: #e9f0fa;
   --color-surface: #ffffff;
+  --color-surface-input: #f5f6fa;
 
   --color-text: #0f172a;
   --color-text-muted: #64748b;

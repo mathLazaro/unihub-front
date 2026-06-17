@@ -9,6 +9,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   width?: string;
 
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
 }
 
 export default function Input({
@@ -19,16 +20,16 @@ export default function Input({
   icon,
   iconPosition = "left",
   onChange,
+  onClick,
 }: InputProps) {
-  const wraperClass = `p-2 border border-gray-300 rounded-full focus-within:ring-2 focus-within:ring-primary bg-[#F5F6FA] flex items-center gap-2 px-4`;
-
   const inputTemplate = (
     <input
       type={type}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="flex-1 focus:outline-none bg-transparent text-xl "
+      onClick={onClick}
+      className="flex-1 focus:outline-none bg-transparent text-xl rounded-full "
       style={{ width }}
     />
   );
@@ -37,19 +38,23 @@ export default function Input({
     switch (iconPosition) {
       case "left":
         return (
-          <div className={wraperClass}>
+          <div className="input-wrapper flex items-center gap-2 px-4 rounded-full">
             {icon}
             {inputTemplate}
           </div>
         );
       case "right":
         return (
-          <div className={wraperClass}>
+          <div className="input-wrapper flex items-center gap-2 px-4 rounded-full">
             {inputTemplate}
             {icon}
           </div>
         );
     }
   }
-  return <div className={wraperClass}>{inputTemplate}</div>;
+  return (
+    <div className="input-wrapper flex items-center gap-2 px-4">
+      {inputTemplate}
+    </div>
+  );
 }
