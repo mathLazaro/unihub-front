@@ -6,7 +6,7 @@ import {
 } from "@phosphor-icons/react";
 import logo from "../../assets/logo.svg";
 import Input from "../input/Input";
-import "./Navbar.css";
+import "./navbar.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
