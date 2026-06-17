@@ -6,7 +6,7 @@ export default function InternalLayout() {
     <>
       <Navbar />
 
-      <main>
+      <main className="px-[5vw] py-5 md:px-[10vw] lg:px-[15vw] ">
         <Outlet />
       </main>
     </>

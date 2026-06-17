@@ -29,6 +29,7 @@ export default function Input({
       value={value}
       onChange={onChange}
       className="flex-1 focus:outline-none bg-transparent text-xl "
+      style={{ width }}
     />
   );
 
@@ -36,23 +37,19 @@ export default function Input({
     switch (iconPosition) {
       case "left":
         return (
-          <div style={{ width }} className={wraperClass}>
+          <div className={wraperClass}>
             {icon}
             {inputTemplate}
           </div>
         );
       case "right":
         return (
-          <div style={{ width }} className={wraperClass}>
+          <div className={wraperClass}>
             {inputTemplate}
             {icon}
           </div>
         );
     }
   }
-  return (
-    <div style={{ width }} className={wraperClass}>
-      {inputTemplate}
-    </div>
-  );
+  return <div className={wraperClass}>{inputTemplate}</div>;
 }
