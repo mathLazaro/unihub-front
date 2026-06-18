@@ -1,57 +1,147 @@
 import { useState } from "react";
 import Input from "../../input/Input";
-import Button from "../../button/Button";
 import type { SelectOption } from "../../select/Select";
 import Select from "../../select/Select";
 import { POST_TYPE } from "../../../core/post-type.enum";
+import type { Post } from "../../../core/model/post.model";
+import Button from "../../button/Button";
+import { AddressBookIcon, MapPinSimpleIcon } from "@phosphor-icons/react";
 
 export interface PostInputProps {
-  onSubmit: (message: string) => void;
+  onSubmit: (post: Post) => void;
 }
 
 export default function PostInput({ onSubmit }: PostInputProps) {
-  const [message, setMessage] = useState("");
-  const [inputMode, setInputMode] = useState(false);
-  const options: SelectOption[] = Object.entries(POST_TYPE).map(
+  const typeOptions: SelectOption[] = Object.entries(POST_TYPE).map(
     ([key, label]) => ({
       value: key,
       label,
     }),
   );
+
+  const buttonLayout = (
+    <div className="flex gap-2">
+      <Button
+        styleButton="neutral"
+        onClick={() => {
+          setInputMode(false);
+          setForm(defaultForm);
+        }}
+      >
+        Cancelar
+      </Button>
+
+      <Button
+        styleButton="primary"
+        size="lg"
+        onClick={() => {
+          onSubmit(form);
+          setForm(defaultForm);
+          setInputMode(false);
+        }}
+      >
+        Publicar
+      </Button>
+    </div>
+  );
+
+  const defaultForm = {
+    content: "",
+    type: "",
+  } as Post;
+
+  const [inputMode, setInputMode] = useState(false);
+  const [form, setForm] = useState(defaultForm);
+
+  const showLocation = ["EVENT", "SERVICE"].includes(form.type);
+  const showContactInfo = ["SERVICE", "OPORTUNITY"].includes(form.type);
+  const showExpiresAt = ["EVENT", "OPORTUNITY"].includes(form.type);
+  const anyChangeOnLayout = showLocation || showContactInfo || showExpiresAt;
+
+  const locationInput = (
+    <Input
+      name="location"
+      placeholder="Localização"
+      value={form.location || ""}
+      onChange={(e) =>
+        setForm((prev) => ({ ...prev, location: e.target.value }))
+      }
+      fontSize="base"
+      icon={<MapPinSimpleIcon size={15} weight="fill" />}
+      width="100%"
+    />
+  );
+
+  const contactInput = (
+    <Input
+      name="contactInfo"
+      placeholder="Contato"
+      value={form.contactInfo || ""}
+      onChange={(e) =>
+        setForm((prev) => ({ ...prev, contactInfo: e.target.value }))
+      }
+      fontSize="base"
+      icon={<AddressBookIcon size={15} />}
+      width="100%"
+    />
+  );
+
+  const expiresAtInput = (
+    <Input
+      name="expiresAt"
+      type="date"
+      placeholder="Localização"
+      value={form.expiresAt || ""}
+      onChange={(e) =>
+        setForm((prev) => ({ ...prev, expiresAt: e.target.value }))
+      }
+      fontSize="sm"
+    />
+  );
+
   if (inputMode)
     return (
       <div className="input-wrapper">
         <textarea
           autoFocus
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          name="content"
+          value={form.content}
+          onChange={(e) =>
+            setForm((prev) => ({ ...prev, content: e.target.value }))
+          }
           placeholder="Compartilhe uma oportunidade, evento ou ideia..."
-          className="flex-1 focus:outline-none bg-transparent text-xl w-full min-h-32 resize-none pr-3"
+          className="flex-1 focus:outline-none bg-transparent text-xl w-full min-h-32 resize-none pr-3 p-3"
         />
-        <div className="flex justify-end gap-2 items-center">
-          <Select options={options} width="12rem" className="text-text" />
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <span className="flex gap-2">
+              <Select
+                name="type"
+                options={typeOptions}
+                width="10vw"
+                className="text-text"
+                value={form.type}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, type: e.target.value }))
+                }
+              />
 
-          <Button
-            styleButton="neutral"
-            size="lg"
-            onClick={() => {
-              setInputMode(false);
-              setMessage("");
-            }}
-          >
-            Cancelar
-          </Button>
+              {showExpiresAt ? expiresAtInput : ""}
+            </span>
 
-          <Button
-            styleButton="primary"
-            size="lg"
-            onClick={() => {
-              onSubmit(message);
-              setInputMode(false);
-            }}
+            {anyChangeOnLayout ? "" : buttonLayout}
+          </div>
+          <div
+            className={`flex flex-col w-full gap-2 ${anyChangeOnLayout ? "" : "hidden"}`}
           >
-            Publicar
-          </Button>
+            {showLocation ? locationInput : ""}
+            {showContactInfo ? contactInput : ""}
+          </div>
+          <div
+            className={`flex justify-end gap-2 ${anyChangeOnLayout ? "" : "hidden"}`}
+          >
+            {buttonLayout}
+          </div>
         </div>
       </div>
     );
