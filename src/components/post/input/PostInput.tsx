@@ -19,6 +19,20 @@ export default function PostInput({ onSubmit }: PostInputProps) {
     }),
   );
 
+  const defaultForm = {
+    content: "",
+    type: "",
+  } as Post;
+
+  const [inputMode, setInputMode] = useState(false);
+  const [form, setForm] = useState(defaultForm);
+
+  const showLocation = ["EVENT", "SERVICE"].includes(form.type);
+  const showContactInfo = ["SERVICE", "OPORTUNITY"].includes(form.type);
+  const showExpiresAt = ["EVENT", "OPORTUNITY"].includes(form.type);
+  const anyChangeOnLayout = showLocation || showContactInfo || showExpiresAt;
+  const invalidForm = !form.content || !form.type;
+
   const buttonLayout = (
     <div className="flex gap-2">
       <Button
@@ -39,24 +53,12 @@ export default function PostInput({ onSubmit }: PostInputProps) {
           setForm(defaultForm);
           setInputMode(false);
         }}
+        disabled={invalidForm}
       >
         Publicar
       </Button>
     </div>
   );
-
-  const defaultForm = {
-    content: "",
-    type: "",
-  } as Post;
-
-  const [inputMode, setInputMode] = useState(false);
-  const [form, setForm] = useState(defaultForm);
-
-  const showLocation = ["EVENT", "SERVICE"].includes(form.type);
-  const showContactInfo = ["SERVICE", "OPORTUNITY"].includes(form.type);
-  const showExpiresAt = ["EVENT", "OPORTUNITY"].includes(form.type);
-  const anyChangeOnLayout = showLocation || showContactInfo || showExpiresAt;
 
   const locationInput = (
     <Input
