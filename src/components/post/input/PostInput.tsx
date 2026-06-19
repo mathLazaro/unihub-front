@@ -9,9 +9,17 @@ import { AddressBookIcon, MapPinSimpleIcon } from "@phosphor-icons/react";
 
 export interface PostInputProps {
   onSubmit: (post: Post) => void;
+  initialData?: Post;
+  mode?: "inline" | "modal";
+  onCancel?: () => void;
 }
 
-export default function PostInput({ onSubmit }: PostInputProps) {
+export default function PostInput({
+  onSubmit,
+  initialData,
+  mode = "inline",
+  onCancel,
+}: PostInputProps) {
   const typeOptions: SelectOption[] = Object.entries(POST_TYPE).map(
     ([key, label]) => ({
       value: key,
@@ -19,13 +27,11 @@ export default function PostInput({ onSubmit }: PostInputProps) {
     }),
   );
 
-  const defaultForm = {
-    content: "",
-    type: "",
-  } as Post;
+  const defaultForm = { content: "", type: "" } as Post;
+  const isEditing = !!initialData;
 
-  const [inputMode, setInputMode] = useState(false);
-  const [form, setForm] = useState(defaultForm);
+  const [inputMode, setInputMode] = useState(mode === "modal");
+  const [form, setForm] = useState<Post>(initialData ?? defaultForm);
 
   const showLocation = ["EVENT", "SERVICE"].includes(form.type);
   const showContactInfo = ["SERVICE", "OPORTUNITY"].includes(form.type);
@@ -33,29 +39,35 @@ export default function PostInput({ onSubmit }: PostInputProps) {
   const anyChangeOnLayout = showLocation || showContactInfo || showExpiresAt;
   const invalidForm = !form.content || !form.type;
 
+  const handleCancel = () => {
+    if (mode === "modal") {
+      onCancel?.();
+    } else {
+      setInputMode(false);
+      setForm(defaultForm);
+    }
+  };
+
+  const handleSubmit = () => {
+    onSubmit(form);
+    if (mode === "inline") {
+      setForm(defaultForm);
+      setInputMode(false);
+    }
+  };
+
   const buttonLayout = (
     <div className="flex gap-2">
-      <Button
-        styleButton="neutral"
-        onClick={() => {
-          setInputMode(false);
-          setForm(defaultForm);
-        }}
-      >
+      <Button styleButton="neutral" onClick={handleCancel}>
         Cancelar
       </Button>
-
       <Button
         styleButton="primary"
         size="lg"
-        onClick={() => {
-          onSubmit(form);
-          setForm(defaultForm);
-          setInputMode(false);
-        }}
+        onClick={handleSubmit}
         disabled={invalidForm}
       >
-        Publicar
+        {isEditing ? "Salvar" : "Publicar"}
       </Button>
     </div>
   );
@@ -71,6 +83,7 @@ export default function PostInput({ onSubmit }: PostInputProps) {
       fontSize="base"
       icon={<MapPinSimpleIcon size={15} weight="fill" />}
       width="100%"
+      maxLength={150}
     />
   );
 
@@ -85,6 +98,7 @@ export default function PostInput({ onSubmit }: PostInputProps) {
       fontSize="base"
       icon={<AddressBookIcon size={15} />}
       width="100%"
+      maxLength={100}
     />
   );
 
@@ -113,6 +127,7 @@ export default function PostInput({ onSubmit }: PostInputProps) {
           }
           placeholder="Compartilhe uma oportunidade, evento ou ideia..."
           className="flex-1 focus:outline-none bg-transparent text-xl w-full min-h-32 resize-none pr-3 p-3"
+          maxLength={560}
         />
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between">
@@ -128,10 +143,8 @@ export default function PostInput({ onSubmit }: PostInputProps) {
                   setForm((prev) => ({ ...prev, type: e.target.value }))
                 }
               />
-
               {showExpiresAt ? expiresAtInput : ""}
             </span>
-
             {anyChangeOnLayout ? "" : buttonLayout}
           </div>
           <div
@@ -152,7 +165,7 @@ export default function PostInput({ onSubmit }: PostInputProps) {
   return (
     <Input
       placeholder="Compartilhe uma oportunidade, evento ou ideia..."
-      value={""}
+      value=""
       onChange={() => {}}
       onClick={() => setInputMode(true)}
       width="100%"

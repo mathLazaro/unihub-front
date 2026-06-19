@@ -14,6 +14,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   onClick?: React.MouseEventHandler<HTMLInputElement>;
   containerClassName?: string;
   inputClassName?: string;
+  maxLenght?: number;
 }
 
 const fontSizeMap = {
@@ -51,6 +52,7 @@ export default function Input({
   onClick,
   containerClassName = "",
   inputClassName = "",
+  maxLenght,
 }: InputProps) {
   const today = new Date().toISOString().split("T")[0];
 
@@ -82,6 +84,7 @@ export default function Input({
       className={inputClass}
       defaultValue={type === "date" ? today : ""}
       min={type === "date" ? today : ""}
+      maxLength={maxLenght ? maxLenght : undefined}
     />
   );
 

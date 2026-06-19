@@ -1,22 +1,11 @@
 import { UserCircleIcon } from "@phosphor-icons/react";
 import PostInput from "../components/post/input/PostInput";
-import type { Post } from "../core/post/post.model";
 import { useCreatePost } from "../hooks/use-posts";
-import { toast } from "sonner";
 import type { CreatePostDto } from "../core/post/api-post.dto";
 import { Feed } from "../components/feed/Feed";
 
 export default function HomePage() {
-  const createPostMutation = useCreatePost();
-
-  const handlePostSubmit = async (data: Post) => {
-    try {
-      await createPostMutation.mutateAsync({ ...data } as CreatePostDto);
-      toast.success("Post criado");
-    } catch {
-      toast.error("Erro ao criar o post");
-    }
-  };
+  const { mutate: createPost } = useCreatePost();
 
   return (
     <>
@@ -31,7 +20,9 @@ export default function HomePage() {
 
         <article className="flex flex-col gap-5 feed col-span-3 md:col-span-2">
           <div className="wrapper-container">
-            <PostInput onSubmit={handlePostSubmit} />
+            <PostInput
+              onSubmit={(data) => createPost({ ...data } as CreatePostDto)}
+            />
           </div>
           <Feed />
         </article>
