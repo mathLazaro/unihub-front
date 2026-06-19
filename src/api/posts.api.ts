@@ -1,3 +1,4 @@
+import type { FeedResponse } from "../core/feed/feed-response.dto";
 import type { CreatePostDto, UpdatePostDto } from "../core/post/api-post.dto";
 import type { Post } from "../core/post/post.model";
 import { api } from "./clients";
@@ -19,5 +20,10 @@ export async function updatePost(id: string, data: UpdatePostDto): Promise<Post>
 
 export async function deletePost(id: string): Promise<void> {
     const response = await api.delete(`/post/${id}`);
+    return response.data;
+}
+
+export async function getFeed(offset: number, limit = 10): Promise<FeedResponse> {
+    const response = await api.get(`/post/feed?offset=${offset}&limit=${limit}`);
     return response.data;
 }

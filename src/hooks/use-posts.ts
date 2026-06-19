@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createPost, getPostById, updatePost } from "../api/posts";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createPost, getFeed, getPostById, updatePost } from "../api/posts.api";
 import type { UpdatePostDto } from "../core/post/api-post.dto";
 
 export function usePost(id: string) {
@@ -16,7 +16,7 @@ export function useCreatePost() {
         mutationFn: createPost,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['posts'],
+                queryKey: ['posts', 'feed'],
             });
         },
     });
@@ -35,7 +35,7 @@ export function useUpdatePost() {
         }) => updatePost(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['posts'],
+                queryKey: ['posts', 'feed'],
             });
         },
     });
@@ -54,8 +54,22 @@ export function useDeletePost() {
         }) => updatePost(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ['posts'],
+                queryKey: ['posts', 'feed'],
             });
         },
     });
+}
+
+export function useFeed() {
+    const query = useInfiniteQuery({
+        queryKey: ["feed"],
+        queryFn: ({ pageParam = 0 }) => getFeed(pageParam),
+        getNextPageParam: (lastPage) =>
+            lastPage.has_more ? lastPage.next_offset : undefined,
+        initialPageParam: 0,
+    });
+
+    const posts = query.data?.pages.flatMap((page) => page.data) ?? [];
+
+    return { ...query, posts };
 }

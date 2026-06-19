@@ -2,8 +2,8 @@ import { useState } from "react";
 import Input from "../../input/Input";
 import type { SelectOption } from "../../select/Select";
 import Select from "../../select/Select";
-import { POST_TYPE } from "../../../core/post-type.enum";
-import type { Post } from "../../../core/model/post.model";
+import { POST_TYPE } from "../../../core/post/post-type.enum";
+import type { Post } from "../../../core/post/post.model";
 import Button from "../../button/Button";
 import { AddressBookIcon, MapPinSimpleIcon } from "@phosphor-icons/react";
 
@@ -121,6 +121,7 @@ export default function PostInput({ onSubmit }: PostInputProps) {
                 width="10vw"
                 className="text-text"
                 value={form.type}
+                placeholder="Tipo"
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, type: e.target.value }))
                 }
