@@ -16,14 +16,14 @@ export function PostCard({ data }: { data: ViewFeedDto }) {
   return (
     <div className="wrapper-container bg-surface p-4 flex flex-col gap-3 shadow-primary">
       <div className="flex items-center gap-3">
-        <div className="flex-1 flex flex-col gap-3">
-          <div className="w-full flex justify-between">
-            <h3 className="font-semibold text-xl">{authorName}</h3>
+        <div className="relative flex-1 flex flex-col gap-3">
+          <h3 className="font-semibold text-xl">{authorName}</h3>
+          <div className="absolute right-1">
             <PostCardButton
               onEdit={() => {}}
               onDelete={() => {}}
               onEnterUser={() => {}}
-            />
+            />  
           </div>
 
           <span className="flex gap-3 items-center">
