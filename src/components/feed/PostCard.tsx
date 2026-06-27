@@ -7,8 +7,10 @@ import PostCardButton from "./PostCardButton";
 import { useDeletePost, useUpdatePost } from "../../hooks/use-posts";
 import { Modal } from "../Modal";
 import PostInput from "../post/input/PostInput";
+import { useNavigate } from "react-router-dom";
 
 export function PostCard({ data }: { data: ViewFeedDto }) {
+  const navigate = useNavigate();
   const authorName = data.author?.name || "";
   const createdAt = timeAgo(new Date(data.createdAt));
   const location = data.location;
@@ -28,14 +30,14 @@ export function PostCard({ data }: { data: ViewFeedDto }) {
       <div className="wrapper-container bg-surface p-4 flex flex-col gap-3 shadow-primary">
         <div className="flex items-center gap-3">
           <div className="relative flex-1 flex flex-col gap-3">
-            <h3 className="font-semibold text-xl">{authorName}</h3>
+            <h3 className="font-semibold text-xl cursor-pointer hover:underline" onClick={() => data.author?.id && navigate(`/user/${data.author.id}`)}>
+              {authorName}
+            </h3>
             <div className="absolute right-1">
               <PostCardButton
                 onEdit={isAuthor ? () => setEditOpen(true) : undefined}
                 onDelete={isAuthor? () => {deletePost(data.id);}: undefined}
-                onEnterUser={() => {
-                  // TODO redirecionar para usuário
-                }}
+                onEnterUser={data.author?.id ? () => navigate(`/user/${data.author.id}`) : undefined}
               />
             </div>
 

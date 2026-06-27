@@ -49,7 +49,11 @@ export default function PostInput({
   };
 
   const handleSubmit = () => {
-    onSubmit(form);
+    const finalForm = {
+      ...form,
+      title: form.content.substring(0, 50) + (form.content.length > 50 ? '...' : '')
+    };
+    onSubmit(finalForm);
     if (mode === "inline") {
       setForm(defaultForm);
       setInputMode(false);
