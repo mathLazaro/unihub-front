@@ -114,3 +114,9 @@ O gerenciamento de cache e sincronização de dados do servidor é feito com **T
 - Hooks customizados prefixados com `use` (`useFeed.ts`)
 - Estilos utilitários via Tailwind; classes customizadas em arquivos `.css` ao lado do componente quando necessário
 - Cores e tokens de design definidos em `@theme` (ver `src/index.css`)
+
+
+## Documentação Adicional
+
+- [Mapeamento de Validações (Frontend)](./VALIDACOES.md): Guia com as validações operando na entrada de dados, regras e máscaras.
+- [Guia de Apresentação: IHC e Acessibilidade](./IHC_ACESSIBILIDADE.md): Documento explicando como os conceitos de usabilidade de Jakob Nielsen e conformidade WCAG/WAI-ARIA estão aplicados no projeto.
