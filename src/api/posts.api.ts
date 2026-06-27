@@ -4,7 +4,7 @@ import type { Post } from "../core/post/post.model";
 import { api } from "./clients";
 
 export async function getPostById(id: string): Promise<Post> {
-    const response = await api.post(`/post/${id}`);
+    const response = await api.get(`/post/${id}`);
     return response.data;
 }
 
@@ -23,7 +23,17 @@ export async function deletePost(id: string): Promise<void> {
     return response.data;
 }
 
-export async function getFeed(offset: number, limit = 10): Promise<FeedResponse> {
-    const response = await api.get(`/post/feed?offset=${offset}&limit=${limit}`);
+export async function getFeed(offset: number, limit = 10, types?: string[], q?: string, authorId?: string): Promise<FeedResponse> {
+    let url = `/post/feed?offset=${offset}&limit=${limit}`;
+    if (types && types.length > 0) {
+        url += `&types=${types.join(',')}`;
+    }
+    if (q) {
+        url += `&q=${encodeURIComponent(q)}`;
+    }
+    if (authorId) {
+        url += `&authorId=${authorId}`;
+    }
+    const response = await api.get(url);
     return response.data;
 }

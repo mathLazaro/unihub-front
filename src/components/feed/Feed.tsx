@@ -3,7 +3,7 @@ import { PostCard } from "./PostCard";
 import { useFeed } from "../../hooks/use-posts";
 import { CircleNotchIcon } from "@phosphor-icons/react";
 
-export function Feed() {
+export function Feed({ types, q, authorId }: { types?: string[], q?: string, authorId?: string }) {
   const {
     posts,
     fetchNextPage,
@@ -11,7 +11,7 @@ export function Feed() {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = useFeed();
+  } = useFeed(types, q, authorId);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

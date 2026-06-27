@@ -23,10 +23,10 @@ export function usePost(id: string) {
   });
 }
 
-export function useFeed() {
+export function useFeed(types?: string[], q?: string, authorId?: string) {
   const query = useInfiniteQuery({
-    queryKey: FEED_KEY,
-    queryFn: ({ pageParam = 0 }) => getFeed(pageParam),
+    queryKey: [...FEED_KEY, types, q, authorId],
+    queryFn: ({ pageParam = 0 }) => getFeed(pageParam, 10, types, q, authorId),
     getNextPageParam: (lastPage) =>
       lastPage.has_more ? lastPage.next_offset : undefined,
     initialPageParam: 0,
@@ -43,8 +43,9 @@ export function useCreatePost() {
     mutationFn: createPost,
     onSuccess: (newPost) => {
       toast.success("Post criado");
-      queryClient.setQueryData(FEED_KEY, (old: any) => {
-        if (!old) return old;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueriesData({ queryKey: FEED_KEY }, (old: any) => {
+        if (!old || !old.pages) return old;
         const firstPage = old.pages[0];
         return {
           ...old,
@@ -69,12 +70,15 @@ export function useUpdatePost() {
       updatePost(id, data),
     onSuccess: (updatedPost, { id }) => {
       toast.success("Post atualizado");
-      queryClient.setQueryData(FEED_KEY, (old: any) => {
-        if (!old) return old;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueriesData({ queryKey: FEED_KEY }, (old: any) => {
+        if (!old || !old.pages) return old;
         return {
           ...old,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           pages: old.pages.map((page: any) => ({
             ...page,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: page.data.map((post: any) =>
               post.id === id ? { ...post, ...updatedPost } : post,
             ),
@@ -96,12 +100,15 @@ export function useDeletePost() {
     mutationFn: (id: string) => deletePost(id),
     onSuccess: (_, id) => {
       toast.success("Post deletado");
-      queryClient.setQueryData(FEED_KEY, (old: any) => {
-        if (!old) return old;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.setQueriesData({ queryKey: FEED_KEY }, (old: any) => {
+        if (!old || !old.pages) return old;
         return {
           ...old,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           pages: old.pages.map((page: any) => ({
             ...page,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data: page.data.filter((post: any) => post.id !== id),
           })),
         };
