@@ -53,6 +53,7 @@ export default function Input({
   containerClassName = "",
   inputClassName = "",
   maxLenght,
+  ...rest
 }: InputProps) {
   const today = new Date().toISOString().split("T")[0];
 
@@ -85,6 +86,7 @@ export default function Input({
       defaultValue={type === "date" ? today : ""}
       min={type === "date" ? today : ""}
       maxLength={maxLenght ? maxLenght : undefined}
+      {...rest}
     />
   );
 
