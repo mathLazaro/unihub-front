@@ -3,12 +3,15 @@ import {
   MagnifyingGlassIcon,
   SignOutIcon,
   UserIcon,
+  Bell,
+  BellIcon
 } from "@phosphor-icons/react";
 import logo from "../../assets/logo.svg";
 import Input from "../input/Input";
 import "./navbar.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { NotificationBell } from "../notification/NotificationBell";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -16,7 +19,17 @@ export default function Navbar() {
   const currentPath = window.location.pathname;
 
   const handleSearchButtonClick = () => {
-    if (currentPath !== "/search") navigate("/search");
+    if (search.trim()) {
+      navigate(`/search?q=${encodeURIComponent(search.trim())}`);
+    } else if (currentPath !== "/search") {
+      navigate("/search");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearchButtonClick();
+    }
   };
   const handleHomeButtonClick = () => {
     if (currentPath !== "/") navigate("/");
@@ -43,6 +56,7 @@ export default function Navbar() {
         <MagnifyingGlassIcon size={32} />
         <span>Buscar</span>
       </button>
+      <NotificationBell />
       <button
         className={`section-button text-sm ${currentPath === "/profile" ? "active" : ""}`}
         onClick={handleProfileButtonClick}
@@ -74,15 +88,18 @@ export default function Navbar() {
               placeholder="Buscar oportunidades, pessoas..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
               icon={<MagnifyingGlassIcon size={20} />}
               width="25vw"
             />
           )}
         </span>
-        <span className="flex items-center gap-8">{navButtons}</span>
+        <span className="flex items-center gap-8">
+          {navButtons}
+        </span>
       </nav>
 
-      <div className="md:hidden bg-surface shadow-primary p-3 px-4 flex justify-center">
+      <div className="md:hidden bg-surface shadow-primary p-3 px-4 flex justify-between items-center">
         <img
           src={logo}
           alt="logo"
